@@ -8,13 +8,13 @@ export const unstable_settings = {
   // initialRouteName: "Outfit Journal",
 };
 
-import { Stack, useRouter } from "expo-router";
-import { useTheme } from "@react-navigation/native";
+import { Stack } from "expo-router";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { Pressable } from "react-native";
+import { useRouter } from "expo-router";
 
 export default function JournalLayout() {
   const router = useRouter();
-  const { colors } = useTheme();
-
   return (
     <Stack
       screenOptions={{

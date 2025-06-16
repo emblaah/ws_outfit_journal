@@ -21,7 +21,7 @@ export const OutfitCard: React.FC<OutfitCardProps> = ({
   onToggleFavorite,
 }) => (
   <Pressable style={{ width: "48%", marginBottom: 16 }} onPress={onPress}>
-    <Card className="w-full overflow-hidden h-full">
+    <Card className="w-full overflow-hidden ">
       <Box className="flex flex-row justify-between">
         <Image
           source={{ uri: item.image }}

@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { Alert, StyleSheet } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useOutfits } from "@/context/OutfitContext";
 import { Box } from "@/components/ui/box";
@@ -84,6 +89,7 @@ export default function AddOutfit() {
       favorite: false,
       dateAdded: new Date().toISOString(),
     });
+    setLoading(false);
 
     Alert.alert("Success", "Outfit added successfully!", [
       {
@@ -94,67 +100,75 @@ export default function AddOutfit() {
         },
       },
     ]);
+    setName("");
+    setDescription("");
+    setImage(null);
   };
 
   return (
-    <ScrollView className="flex-1 p-4">
-      <Box className="space-y-6">
-        <VStack space="md" className="items-center">
-          {image ? (
-            <Box className="mb-4 rounded-lg overflow-hidden">
-              <Image
-                source={{ uri: image }}
-                alt="Outfit"
-                style={styles.image}
-                resizeMode="cover"
-                className="w-96 h-96 rounded-lg"
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}>
+      <ScrollView className="flex-1 p-4" keyboardShouldPersistTaps="handled">
+        <Box className="space-y-6 pb-20">
+          <VStack space="md" className="items-center">
+            {image ? (
+              <Box className="mb-4 rounded-lg overflow-hidden">
+                <Image
+                  source={{ uri: image }}
+                  alt="Outfit"
+                  style={styles.image}
+                  resizeMode="cover"
+                  className="w-96 h-96 rounded-lg"
+                />
+              </Box>
+            ) : (
+              <Box className="h-96 w-full bg-gray-200 items-center justify-center rounded-lg mb-4">
+                <Text className="text-gray-500">No image selected</Text>
+              </Box>
+            )}
+
+            <Box className="flex-row w-full space-x-2 mb-4">
+              <Button className="flex-1" onPress={handleTakePhoto}>
+                <ButtonText>Take Photo</ButtonText>
+              </Button>
+              <Button
+                className="flex-1"
+                onPress={handlePickImage}
+                variant="outline">
+                <ButtonText>Choose from Gallery</ButtonText>
+              </Button>
+            </Box>
+
+            <Input className="w-full mb-4">
+              <InputField
+                placeholder="Outfit name"
+                value={name}
+                onChangeText={setName}
               />
-            </Box>
-          ) : (
-            <Box className="h-96 w-full bg-gray-200 items-center justify-center rounded-lg mb-4">
-              <Text className="text-gray-500">No image selected</Text>
-            </Box>
-          )}
+            </Input>
 
-          <Box className="flex-row w-full space-x-2 mb-4">
-            <Button className="flex-1" onPress={handleTakePhoto}>
-              <ButtonText>Take Photo</ButtonText>
-            </Button>
+            <Input className="w-full mb-6">
+              <InputField
+                placeholder="Description (optional)"
+                value={description}
+                onChangeText={setDescription}
+                numberOfLines={4}
+                className="h-24"
+              />
+            </Input>
+
             <Button
-              className="flex-1"
-              onPress={handlePickImage}
-              variant="outline">
-              <ButtonText>Choose from Gallery</ButtonText>
+              className="w-full"
+              onPress={handleSave}
+              isDisabled={loading || !name || !image}>
+              <ButtonText>{loading ? "Saving..." : "Save Outfit"}</ButtonText>
             </Button>
-          </Box>
-
-          <Input className="w-full mb-4">
-            <InputField
-              placeholder="Outfit name"
-              value={name}
-              onChangeText={setName}
-            />
-          </Input>
-
-          <Input className="w-full mb-6">
-            <InputField
-              placeholder="Description (optional)"
-              value={description}
-              onChangeText={setDescription}
-              numberOfLines={4}
-              className="h-24"
-            />
-          </Input>
-
-          <Button
-            className="w-full"
-            onPress={handleSave}
-            isDisabled={loading || !name || !image}>
-            <ButtonText>{loading ? "Saving..." : "Save Outfit"}</ButtonText>
-          </Button>
-        </VStack>
-      </Box>
-    </ScrollView>
+          </VStack>
+        </Box>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

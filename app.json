@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "test-expo",
-    "slug": "test-expo",
+    "name": "outfit-journal",
+    "slug": "outfit-journal",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
