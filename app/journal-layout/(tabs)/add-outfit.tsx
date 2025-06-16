@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Alert, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { useOutfits } from "../../context/OutfitContext";
+import { useOutfits } from "@/context/OutfitContext";
 import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";

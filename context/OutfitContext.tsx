@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export interface Outfit {
@@ -14,10 +20,11 @@ export interface Outfit {
 interface OutfitContextType {
   outfits: Outfit[];
   addOutfit: (newOutfit: Outfit) => void;
-  toggleFavorite: (id: string) => void;
+  toggleFavorite: (favoriteOutfit: Outfit) => void;
   deleteOutfit: (id: string) => void;
   editOutfit: (id: string, updatedOutfit: Outfit) => void;
   loading: boolean;
+  favorites: Outfit[];
 }
 
 const OutfitContext = createContext<OutfitContextType | undefined>(undefined);
@@ -31,6 +38,7 @@ interface OutfitProviderProps {
 export const OutfitProvider = ({ children }: OutfitProviderProps) => {
   const [outfits, setOutfits] = useState<Outfit[]>([]);
   const [loading, setLoading] = useState(true);
+  const [favorites, setFavorites] = useState<Outfit[]>([]);
 
   // Load outfits from AsyncStorage on mount
   useEffect(() => {
@@ -70,10 +78,19 @@ export const OutfitProvider = ({ children }: OutfitProviderProps) => {
     setOutfits((prev) => [...prev, newOutfit]);
   };
 
-  const toggleFavorite = (id: string) => {
-    setOutfits((prev) =>
-      prev.map((outfit) =>
-        outfit.id === id ? { ...outfit, favorite: !outfit.favorite } : outfit
+  const toggleFavorite = (favoriteOutfit: Outfit) => {
+    setFavorites((prevFavorites) => {
+      if (prevFavorites.some((fav) => fav.id === favoriteOutfit.id)) {
+        return prevFavorites.filter((fav) => fav.id !== favoriteOutfit.id);
+      } else {
+        return [...prevFavorites, favoriteOutfit];
+      }
+    });
+    setOutfits((prevOutfits) =>
+      prevOutfits.map((outfit) =>
+        outfit.id === favoriteOutfit.id
+          ? { ...outfit, favorite: !outfit.favorite }
+          : outfit
       )
     );
   };
@@ -90,13 +107,14 @@ export const OutfitProvider = ({ children }: OutfitProviderProps) => {
 
   return (
     <OutfitContext.Provider
-      value={{ 
-        outfits, 
-        addOutfit, 
-        toggleFavorite, 
-        deleteOutfit, 
+      value={{
+        outfits,
+        addOutfit,
+        toggleFavorite,
+        deleteOutfit,
         editOutfit,
-        loading 
+        loading,
+        favorites,
       }}>
       {children}
     </OutfitContext.Provider>

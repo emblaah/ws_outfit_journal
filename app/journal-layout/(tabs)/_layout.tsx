@@ -1,16 +1,19 @@
 import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Tabs } from "expo-router";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+import { useRouter, Tabs } from "expo-router";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Entypo } from "@expo/vector-icons";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
-  return <FontAwesome size={18} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome {...props} />;
 }
 
 export default function TabLayout() {
+  const router = useRouter();
   return (
     <Tabs
       screenOptions={{
@@ -22,7 +25,20 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <Ionicons size={18} name="home" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="add-outfit"
+        options={{
+          title: "Add Outfit",
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <Ionicons size={24} name="add" color={color} />
+          ),
         }}
       />
 
@@ -30,8 +46,19 @@ export default function TabLayout() {
         name="calendar"
         options={{
           title: "Calendar",
+          headerShown: false,
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="calendar" color={color} />
+            <Ionicons size={18} name="calendar" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="favorites"
+        options={{
+          title: "Favorites",
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <Entypo size={18} name="heart" color={color} />
           ),
         }}
       />

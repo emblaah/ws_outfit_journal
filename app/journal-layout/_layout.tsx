@@ -9,11 +9,9 @@ export const unstable_settings = {
 };
 
 import { Stack, useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import { Pressable } from "react-native";
 import { useTheme } from "@react-navigation/native";
 
-export default function TabLayout() {
+export default function JournalLayout() {
   const router = useRouter();
   const { colors } = useTheme();
 
@@ -21,20 +19,17 @@ export default function TabLayout() {
     <Stack
       screenOptions={{
         headerTitle: "Outfit Journal",
-        headerRight: () => (
-          <Pressable
-            onPress={() => router.push("./add-outfit")}
-            style={{ marginRight: 16 }}
-            accessibilityLabel="Add Outfit">
-            <Ionicons name="add" size={24} color={colors.text} />
-          </Pressable>
-        ),
       }}>
       <Stack.Screen
-        name="add-outfit"
+        name="(tabs)"
         options={{
-          headerTitle: "Add Outfit",
-          headerRight: () => undefined, // Hide the add button on this screen
+          headerShown: true, // Show the header but without the + button
+        }}
+      />
+      <Stack.Screen
+        name="outfit/[id]"
+        options={{
+          headerTitle: "Outfit Details",
         }}
       />
     </Stack>
